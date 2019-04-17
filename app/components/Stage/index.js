@@ -102,7 +102,7 @@ const Stage = React.createClass({
     const { currentRound, data, user, players, playerCount } = this.props;
 
     if (playerCount < 3) {
-      return <p className={ style.overlay }>Waiting for more players to join... (3 minimum)</p>;
+      return <p className={ style.overlay }>Waiting for more players to join...</p>;
     }
 
     if (playerCount > 2 && !currentRound) {
