@@ -15,6 +15,7 @@
   .chatbox {
     border-left: 1px solid black;
     flex: 0 0 320px;
+    max-height: 100vh;
   }
 
   @media (max-width: 640px) {
