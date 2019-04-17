@@ -7,7 +7,7 @@ const StageHeader = React.createClass({
       return null;
     }
 
-    return <p className="judge-text">You are the czar</p>;
+    return <p className="judge-text">You are the Czar!</p>;
   },
 
   render() {

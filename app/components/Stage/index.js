@@ -134,7 +134,7 @@ const Stage = React.createClass({
     if (_.isEmpty(currentRound.chosenWhiteCards) && currentRound.judgeId === user.id) {
       return (
         <div className={ style.overlay }>
-          <p>You are the Card Czar! <br /> Waiting for submissions...</p>
+          <p>You are the Card Czar! <br /> <small>Waiting for cards...</small></p>
           <div className="blackcard">
             <Card colour="black" card={ currentRound.blackCard } />
           </div>

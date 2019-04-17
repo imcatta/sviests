@@ -8,11 +8,12 @@
     display: flex;
     float: left;
     flex-shrink: 0;
+    flex-wrap: wrap;
   }
 
   button {
     font-size: 14px;
-    margin: 5px 5px 0;
+    margin: 5px 5px 10px 5px;
     padding: 10px 0 12px;
     max-width: 220px;
     height: 46px;
