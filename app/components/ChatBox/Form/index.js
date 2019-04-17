@@ -7,8 +7,9 @@ const Form = React.createClass({
     const input = this.refs.input;
     const message = input.value;
     input.value = '';
-
-    this.props.onSubmit(message);
+    if(message !== '') {
+      this.props.onSubmit(message);
+    }
   },
 
   render() {
