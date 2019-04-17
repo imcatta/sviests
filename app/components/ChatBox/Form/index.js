@@ -14,7 +14,7 @@ const Form = React.createClass({
   render() {
     return (
       <form onSubmit={ this.onSubmit } className="chatbox-form">
-        <input type="text" placeholder="your message . . ." ref="input" />
+        <input type="text" placeholder="Your message ..." ref="input" />
         <button type="submit">Send</button>
       </form>
     );

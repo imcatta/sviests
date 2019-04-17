@@ -102,13 +102,13 @@ const Stage = React.createClass({
     const { currentRound, data, user, players, playerCount } = this.props;
 
     if (playerCount < 3) {
-      return <p className={ style.overlay }>Waiting for more players to join...</p>;
+      return <p className={ style.overlay }>Waiting for more players to join... (3 minimum)</p>;
     }
 
     if (playerCount > 2 && !currentRound) {
       return (
         <div className={ style.overlay }>
-          <button type="button" onClick={ this.startGame }>Start the fucking game!</button>
+          <button type="button" onClick={ this.startGame }>Start the game!</button>
         </div>
       );
     }
@@ -134,7 +134,7 @@ const Stage = React.createClass({
     if (_.isEmpty(currentRound.chosenWhiteCards) && currentRound.judgeId === user.id) {
       return (
         <div className={ style.overlay }>
-          <p>You are the Card Czar <br /> Waiting for Submissions</p>
+          <p>You are the Card Czar! <br /> Waiting for submissions...</p>
           <div className="blackcard">
             <Card colour="black" card={ currentRound.blackCard } />
           </div>

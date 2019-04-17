@@ -70,7 +70,7 @@ const App = React.createClass({
     if (!localStorage.user) {
       return (
         <form onSubmit={ this.onSubmit } className={ styles.form }>
-          <input type="text" ref="input" placeholder="enter your username" />
+          <input type="text" ref="input" placeholder="Enter your name" />
         </form>
       );
     }

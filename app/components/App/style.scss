@@ -13,14 +13,14 @@
   }
 
   .chatbox {
-    border-left: 1px solid darken(#cecece, 10%);
+    border-left: 1px solid black;
     flex: 0 0 320px;
   }
 
   @media (max-width: 640px) {
     .chatbox {
       border-left: none;
-      border-top: 1px solid darken(#cecece, 10%);
+      border-top: 1px solid black;
       flex: 0 0 130px;
     }
   }

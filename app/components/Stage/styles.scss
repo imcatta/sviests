@@ -13,7 +13,7 @@
   flex-direction: column;
 
   .header {
-    border-bottom: 1px solid darken(#cecece, 10%);
+    border-bottom: 1px solid black;
     flex: 0 0 50px;
   }
 
@@ -150,9 +150,9 @@
     color: black;
 
     &.is-selected {
-      transform: scale(1.02);
+      transform: scale(1.05);
       .inner {
-        background: #eee;
+        background: #FFFAE0;
       }
     }
 

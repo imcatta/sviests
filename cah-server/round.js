@@ -119,6 +119,7 @@ class Round {
   allocateWhiteCardsForPlayer(player, playerId) {
     const whiteCards = data.whiteCards;
     if (!player && !player.cards) { player.cards = []; }
+    if (this.gameInterrupt) { player.cards = []; }
 
     while (player.cards.length < 10) {
       const cardIndex = this.getWhiteCard();

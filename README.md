@@ -1,4 +1,4 @@
-# kakas.app — Cards Against Humanity online
+# sviests — Cards Against Humanity online
 
 My attempt at creating an online version of Cards Against Humanity.
 Huge thanks to [Chris Hallberg](http://www.crhallberg.com/) for sorting out the [JSON](http://www.crhallberg.com/cah/json)
