@@ -19,11 +19,19 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/public/index.html'));
 });
 
+app.get('/public/sviests.png', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/public/sviests.png'));
+});
+
+
 app.get('/:id', (req,res) => {
   res.sendFile(path.resolve(__dirname + '/public/room.html'));
 });
 
+
+
 app.use(express.static('public'));
+
 
 const cahServer = new CahServer(io);
 io.on('connection', (socket) => {
