@@ -19,8 +19,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/public/index.html'));
 });
 
-app.get('/public/sviests.png', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/public/sviests.png'));
+app.get('/public/sviests-logo.png', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/public/sviests-logo.png'));
 });
 
 
