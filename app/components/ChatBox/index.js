@@ -4,8 +4,8 @@ import Messages from './Messages';
 import Form from './Form';
 
 const ChatBox = React.createClass({
-  onSubmit(message) {
-    this.props.socket.emit('sendchat', message);
+  onSubmit(message, username) {
+    this.props.socket.emit('sendchat', message, username);
   },
 
   render() {

@@ -70,9 +70,10 @@ class CahServer {
     this.updateRoom();
   }
 
-  sendChat(data) {
+  sendChat(data, username) {
     this.socket.room.newMessage({
-      username: this.socket.player.username,
+      //username: this.socket.player.username,
+      username: username,
       text: urlifyText(cleanString(data)),
       type: 'chat'
     });
