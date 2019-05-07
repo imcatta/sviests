@@ -27,10 +27,20 @@ class Room {
     return _.keys(this.players).length;
   }
 
+  get _gameStatus() {
+    if (!this.games) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   playerLeft(playerId) {
     if (this._currentGame) {
       this._currentGame.playerLeft(playerId);
     }
+    //console.log('player count:' + this._playerCount());
   }
 
   getGameById(id) {

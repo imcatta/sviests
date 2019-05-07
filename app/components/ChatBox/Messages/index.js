@@ -4,23 +4,23 @@ import styles from './style.scss';
 
 const Messages = React.createClass({
   renderMessage(message, i) {
-    const { user } = this.props;
+    const { user, currentUserName } = this.props;
     const classNames = {
       message: true,
-      'is-users': user && user.username === message.username
+      'is-users': user && currentUserName === message.username
     };
     classNames[`${ message.type }-message`] = true;
 
     return (
       <div key={ i } className={ classnames(classNames) }>
-        <span className="username">{ message.username }</span>
+        <span className="username">{ currentUserName }</span>
         <p dangerouslySetInnerHTML={{ __html: message.text }} />
       </div>
     );
   },
 
   renderMessages() {
-    return this.props.messages.map(this.renderMessage);;
+    return this.props.messages.map(this.renderMessage);
   },
 
   render() {

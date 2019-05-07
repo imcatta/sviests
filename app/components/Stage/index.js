@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 import style from './styles.scss'
-
+//import { shuffle } from '../../../utils';
 import { Card, StageLeft, StageRight, StageHeader } from '../';
 
 const Stage = React.createClass({
@@ -10,12 +10,14 @@ const Stage = React.createClass({
     return {
       selectedCards: [],
       readyToSubmit: false,
-      renderNextRoundButton: false
+      renderNextRoundButton: false,
+      gameStarted: false
     };
   },
 
   startGame() {
     this.props.socket.emit('start-game');
+    this.state.gameStarted = true;
   },
 
   selectCard(cardIndex) {
@@ -23,6 +25,13 @@ const Stage = React.createClass({
     if (!currentRound) { return; }
 
     const { blackCard } = currentRound;
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
 
     let selectedCards = this.state.selectedCards;
     const availablePosition = selectedCards.indexOf(null);
@@ -36,9 +45,19 @@ const Stage = React.createClass({
       return;
     } else {
       selectedCards.push(cardIndex);
+      //shuffleArray(selectedCards);
+      //console.log("selectedCards:" + selectedCards);
     }
 
+
+    //shuffleArray(selectedCards);
+
+    //let selectedCards = shuffleArray(selectedCards);
+
+    console.log("selectedCards: " + selectedCards);
     const actualSelectedCards = selectedCards.filter((c) => _.isNumber(c)).length;
+    console.log("actualSelectedCards " + actualSelectedCards);
+
 
     this.setState({
       selectedCards,
@@ -72,10 +91,9 @@ const Stage = React.createClass({
         </button>
       );
     }
-
     this.timeout = setTimeout(() => {
       this.setState({ renderNextRoundButton: true });
-    }, 3000);
+    }, 1000);
 
     return null;
   },
@@ -99,17 +117,24 @@ const Stage = React.createClass({
     clearTimeout(this.timeout);
     this.timeout = undefined;
     const { selectedCards, readyToSubmit } = this.state;
-    const { currentRound, data, user, players, playerCount } = this.props;
+    const { currentRound, data, user, players, playerCount, gameStarted } = this.props;
 
-    if (playerCount < 3) {
-      return <p className={ style.overlay }>Waiting for more players to join...</p>;
+    if (playerCount < 3 && !gameStarted) {
+      //console.log(JSON.stringify(players));
+      return <p className={ style.overlay }>Waiting for more players to join... ({ playerCount }). </p>;
     }
 
-    if (playerCount > 2 && !currentRound) {
+    if (playerCount > 2 && !currentRound && !gameStarted) {
       return (
         <div className={ style.overlay }>
           <button type="button" onClick={ this.startGame }>Start the game!</button>
         </div>
+      );
+    }
+
+     if(!_.isEmpty(currentRound) && gameStarted) {
+      return (
+        <div className={ style.overlay }><p>Game in progress.. IDs { currentRound.players[user.id] }</p></div>
       );
     }
 

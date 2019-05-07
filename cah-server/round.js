@@ -10,6 +10,8 @@ class Round {
     this.whiteCardsUsed = [...whiteCardsUsed];
     this.blackCardsUsed = [...blackCardsUsed];
     this.previousJudge = previousJudge;
+
+    // Temporary fix to avoid crashing
     this.gameInterrupt = false;
 
 
@@ -27,33 +29,39 @@ class Round {
   }
 
   playerLeft(playerId) {
-    //console.log("player left");
+    console.log("playerLeft " + playerId);
     this.gameInterrupt = true;
 
-     //const player = this.players[playerId];
-     //if (!player && !player.cards) { return; }
+    const player = this.players[playerId];
+    console.log('gameID' + this.gameId);
+    // if (!player && !player.cards) { return; }
      //delete this.chosenWhiteCards[playerId];
     //
-     //player.cards.forEach((card) => {
-       //const cardIndex = _.findIndex(this.whiteCardsUsed, { index: card.index });
-       //this.whiteCardsUsed.splice(cardIndex, 1);
+    // player.cards.forEach((card) => {
+     //  const cardIndex = _.findIndex(this.whiteCardsUsed, { index: card.index });
+     //  this.whiteCardsUsed.splice(cardIndex, 1);
      //});
     //
-     //delete this.players[playerId];
-     //this.playerIds = _.map(this.players, (p => p.id));
-    //
-     //if (this.judgeId === playerId) {
-       //this.judgeId = null;
-       //this.assignJudge();
-     //}
+     delete this.players[playerId];
+     this.playerIds = _.map(this.players, (p => p.id));
+
+     console.log('playerIDs that are left ' + this.playerIds);
+
+     if (this.judgeId === playerId) {
+       this.judgeId = null;
+       this.assignJudge();
+     }
   }
 
   playerJoined(player) {
-    if (!this.gameInterrupt) {
+    console.log("playerJoined: " + JSON.stringify(player));
+
+    // Temporary fix
+    //if (!this.gameInterrupt) {
       this.players[player.id] = player;
       this.playerIds.push(player.id);
       this.allocateWhiteCards();
-    }
+    //}
   }
 
   assignJudge() {
@@ -119,7 +127,7 @@ class Round {
   allocateWhiteCardsForPlayer(player, playerId) {
     const whiteCards = data.whiteCards;
     if (!player && !player.cards) { player.cards = []; }
-    if (this.gameInterrupt) { player.cards = []; }
+    //if (this.gameInterrupt) { player.cards = []; }
 
     while (player.cards.length < 10) {
       const cardIndex = this.getWhiteCard();

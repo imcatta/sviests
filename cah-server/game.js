@@ -44,7 +44,6 @@ class Game {
   newRound(players) {
     const round = new Round(this.id, players, this._whiteCardsUsed, this._blackCardsUsed, this._previousJudge);
     this.rounds.push(round);
-
     return round;
   }
 }

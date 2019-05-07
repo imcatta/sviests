@@ -37,7 +37,7 @@ const PlayerSubmissions = React.createClass({
     // const card = { text: blackCardText };
 
     return (
-      <div className="submission" key={ playerId }>
+      <div className="submission" key={ playerId } style={{ order: Math.floor(Math.random() * 100) }}>
         <div className="chosen-cards">
           { currentRound.chosenWhiteCards[playerId].map(this.renderPlayerSubmission) }
         </div>

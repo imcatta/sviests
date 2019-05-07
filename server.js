@@ -10,6 +10,8 @@ const io = require('socket.io')(server);
 const { cleanString, urlifyText } = require('./utils');
 const data = require('./data.json');
 const rooms = {};
+// or
+var util = require('util');
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);
@@ -36,7 +38,18 @@ app.use(express.static('public'));
 const cahServer = new CahServer(io);
 io.on('connection', (socket) => {
   cahServer.init(socket);
-  //console.log('socket: connection');
+
+  socket.on('disconnect', function(reason) {
+    console.log('Socket disconnected! ' + reason);
+  });
+
+  socket.on('greet', function(data) {
+    socket.disconnect();
+    socket.emit('respond', data);
+    console.log('GREET RECEIVED from ' + data);
+  });
+
+  //console.log('socket: connection' + util.inspect(socket));
 });
 
 if (!isProduction) {

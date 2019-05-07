@@ -13,6 +13,7 @@ class CahServer {
     this.socket = socket;
     socket.on('join', this.userJoined.bind(this));
     socket.on('disconnect', this.userLeft.bind(this));
+    socket.on('respond', this.userClosed.bind(this));
     socket.on('adduser', this.addPlayer.bind(this));
     socket.on('sendchat', this.sendChat.bind(this));
     socket.on('start-game', this.startGame.bind(this));
@@ -22,18 +23,70 @@ class CahServer {
   }
 
   userJoined(roomName) {
+    console.log("userJoined room " + roomName);
     this.rooms[roomName] = this.rooms[roomName] || new Room(roomName);
     this.socket.room = this.rooms[roomName];
     this.socket.join(roomName);
     this.updateRoom();
   }
 
-  userLeft() {
-    const { room, player } = this.socket;
-    if (room && player) {
-      room.playerLeft(player.id);
+  userClosed(data) {
+    console.log('userclosed ran!!!!!!');
+    this.socket.room.newMessage({
+      username: 'Server',
+      text: `
+        ${ data.username } has left\n
+        (player count: ${ this.socket.room._playerCount })`,
+      type: 'server'
+    });
+    this.updateRoom();
+  }
+
+  userLeft(reason) {
+    //console.log('DISCONNECT from ' + this.socket.room.player);
+
+    console.log('reason: ' + reason);
+    //const { room, player } = this.socket;
+
+    if (this.socket.room && this.socket.player && this.socket.player.username !== undefined) {
+      console.log('ROOMNAME ' + this.socket.room.name);
+      console.log('PLAYERNAME ' + this.socket.player.username);
+
+      this.socket.room.playerLeft(this.socket.player.id);
+
+
+      console.log('userLeft::: ' + this.socket.player.username + ' left room ' + this.socket.room.name);
+
+      //this.socket.disconnect();
 
       this.updateRoom();
+
+      /* this.socket.room.newMessage({
+        username: 'Server',
+        text: `
+        ${ this.socket.player.username } has left\n
+        (player count: ${ this.socket.room._playerCount })`,
+        type: 'server'
+      });
+      this.socket.player = [];
+      this.updateRoom(); */
+
+      //this.socket.emit('disconnected');
+      //this.socket.player.disconnect();
+
+      if(this.socket.room._playerCount > 2) {
+
+        this.updateRoom();
+
+        this.socket.room.newMessage({
+          username: 'Server',
+          text: `<strong>A player left, starting a new game.</strong>`,
+          type: 'server'
+        });
+
+        this.startGame();
+
+      }
     }
   }
 
@@ -46,28 +99,45 @@ class CahServer {
       username = cleanString(username);
     }
 
-    const newPlayer = new Player(id, username);
+    //this.socket.currentUserName = username;
 
-    this.socket.player = newPlayer;
-    try {
-      this.socket.room.addPlayer(newPlayer);
-    }
 
-    catch(error) {
-      console.log(error);
-    }
+    if(this.socket.room) {
+      const newPlayer = new Player(id, username);
 
-    this.socket.room.newMessage({
-      username: 'Server',
-      text: `${ username } has joined`,
-      type: 'server'
-    });
+      this.socket.player = newPlayer;
+      //console.log('addPlayer ' + this.socket.room.name);
+      try {
+        this.socket.room.addPlayer(newPlayer);
+        console.log(username + ' joined ' + this.socket.room.name)
+      }
 
-    if (this.socket.room._currentGame) {
-      this.socket.room._currentGame.playerJoined(player);
+      catch(error) {
+        console.log(error);
+      }
+
+      this.socket.room.newMessage({
+        username: 'Server',
+        text: `${ username } has joined (player count: ${ this.socket.room._playerCount })`,
+        type: 'server'
+      });
+
+      this.updateRoom();
+      //console.log('socketroom ' + JSON.stringify(this.socket.room));
     }
 
     this.updateRoom();
+
+
+
+
+/*    if (this.socket.room._currentGame) {
+      // Temporary fix, maybe disable joining to prevent crashes?
+
+      //this.socket.room._currentGame.playerJoined(player);
+    }*/
+
+
   }
 
   sendChat(data, username) {
@@ -130,19 +200,28 @@ class CahServer {
   }
 
   updateRoom() {
-    const { room } = this.socket;
-    const update = {
-      name: room.name,
-      messages: room.messages,
-      games: room.games,
-      players: room.players,
-      playerCount: room._playerCount,
-      whiteCardsUsed: room._whiteCardsUsed,
-      currentGame: room._currentGame,
-      currentRound: room._currentGame ? room._currentGame._currentRound : null
-    };
+    const { player, room } = this.socket;
 
-    this.io.to(room.name).emit('updateroom', update);
+    if (player && room) {
+      const update = {
+        name: room.name,
+        messages: room.messages,
+        games: room.games,
+        players: room.players,
+        thisPlayer: player,
+        playerCount: room._playerCount,
+        whiteCardsUsed: room._whiteCardsUsed,
+        currentGame: room._currentGame,
+        currentRound: room._currentGame ? room._currentGame._currentRound : null,
+        //gameStarted: true
+      };
+      this.io.to(room.name).emit('updateroom', update);
+
+    }
+
+
+    //console.log('thisplayer ' + update.thisPlayer.id);
+
   }
 }
 
