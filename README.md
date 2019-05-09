@@ -1,20 +1,23 @@
-# sviests — Cards Against Humanity online
+# sviests.co — Cards Against Humanity online
 
-My attempt at creating an online version of Cards Against Humanity.
-Huge thanks to [Chris Hallberg](http://www.crhallberg.com/) for sorting out the [JSON](http://www.crhallberg.com/cah/json)
-so i didn't have to! :)
+A mobile-friendly version of Cards Against Humanity.
+
+![screenshot of sviests.co](https://github.com/armn/sviests/raw/master/screenshot.png)
+
+Shout-out to [Bradley Jennings](https://github.com/bradjenn/cards-against-humanity) for original source code. I have added responsiveness and attempted to fix a bug that crashes the server when players join or leave a game in progress. 
+
+
+### To-do
+
+Still learning to code, so my additions to the code are a bit spaghetti. Sometimes games are left in an unplayable state and most of node packages are out of date. Pull requests welcome! 
 
 ### Setup
 
 Using [npm](https://www.npmjs.com/):
 
     $ npm install
-    
-### Is this legal? Yes i think so.
+
+Check package.json for other scripts.
+
+### Cards Against Humanity
 [Cards Against Humanity](https://cardsagainsthumanity.com/) is distributed under a [Creative Commons BY-NC-SA 2.0 license](https://creativecommons.org/licenses/by-nc-sa/2.0/).
-That means you can use, remix, and share the game for free, but you can't sell it without permission.
-Consult their [FAQ](https://cardsagainsthumanity.com/#info) if you don't believe it.
-
-
-### Want to help?
-Do it! Happy for anyone to get involved, just give me a shout
