@@ -9,7 +9,7 @@ Shout-out to [Bradley Jennings](https://github.com/bradjenn/cards-against-humani
 
 ### To-do
 
-Still learning to code, so my additions to the code are a bit spaghetti. Sometimes games are left in an unplayable state and most of node packages are out of date. Pull requests welcome! 
+Still learning to code, so my additions probably are a bit spaghetti. Sometimes games are left in an unplayable state and most of node packages are out of date. Pull requests welcome! 
 
 ### Setup
 
