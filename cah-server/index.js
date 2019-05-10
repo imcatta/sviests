@@ -141,12 +141,16 @@ class CahServer {
   }
 
   sendChat(data, username) {
-    this.socket.room.newMessage({
-      //username: this.socket.player.username,
-      username: username,
-      text: urlifyText(cleanString(data)),
-      type: 'chat'
-    });
+
+    if (this.socket.room) {
+      this.socket.room.newMessage({
+        //username: this.socket.player.username,
+        username: username,
+        text: urlifyText(cleanString(data)),
+        type: 'chat'
+      });
+
+    }
 
     this.updateRoom();
   }
