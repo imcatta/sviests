@@ -190,17 +190,22 @@ class CahServer {
 
   winnerChosen(playerId, gameId, roundId) {
     const game = this.socket.room.getGameById(gameId);
-    const round = game.getRoundById(roundId);
-    const roundIndex = _.findIndex(game.rounds, { id: roundId });
-    round.winnerChosen(playerId);
 
-    this.socket.room.newMessage({
-      username: 'Server',
-      text: `Round ${ roundIndex + 1 } - ${ round.players[playerId].username } is the winner`,
-      type: 'server'
-    });
+    if (game && game.getRoundById(roundId)) {
+      const round = game.getRoundById(roundId);
+      const roundIndex = _.findIndex(game.rounds, { id: roundId });
+      round.winnerChosen(playerId);
+      this.socket.room.newMessage({
+        username: 'Server',
+        text: `Round ${ roundIndex + 1 } - ${ round.players[playerId].username } is the winner`,
+        type: 'server'
+      });
 
-    this.updateRoom();
+      this.updateRoom();
+    }
+
+
+
   }
 
   updateRoom() {
