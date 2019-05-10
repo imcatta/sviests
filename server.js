@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('greet', function(data) {
-    socket.disconnect();
+    //socket.disconnect();
     socket.emit('respond', data);
     console.log('GREET RECEIVED from ' + data);
   });
