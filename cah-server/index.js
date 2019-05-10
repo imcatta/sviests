@@ -177,14 +177,18 @@ class CahServer {
   }
 
   playerSubmitted(gameId, roundId, playerId, choices) {
-    const game = this.socket.room.getGameById(gameId);
 
-    if (game && game.getRoundById(roundId)) {
-      const round = game.getRoundById(roundId);
-      round.playerSubmitted(playerId, choices);
+    if (this.socket.room.getGameById(gameId)) {
+      const game = this.socket.room.getGameById(gameId);
 
-      this.updateRoom();
+      if (game && game.getRoundById(roundId)) {
+        const round = game.getRoundById(roundId);
+        round.playerSubmitted(playerId, choices);
+
+        this.updateRoom();
+      }
     }
+
 
   }
 
