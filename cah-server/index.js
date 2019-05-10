@@ -159,21 +159,27 @@ class CahServer {
 
   displayNextJudge() {
     const { room } = this.socket;
-    room.newMessage({
-      username: 'Server',
-      text: `Round ${ room._currentGame.rounds.length } - ${ room._currentJudge.username } is the judge`,
-      type: 'server'
-    });
+    if (room._currentGame.rounds.length && room._currentJudge.username) {
+      room.newMessage({
+        username: 'Server',
+        text: `Round ${ room._currentGame.rounds.length } - ${ room._currentJudge.username } is the judge`,
+        type: 'server'
+      });
+    }
 
   }
 
   nextRound(gameId) {
     const { room } = this.socket;
-    const game = room.getGameById(gameId);
-    game.newRound(room.players);
-    this.displayNextJudge();
 
-    this.updateRoom();
+    if (gameId && room) {
+      const game = room.getGameById(gameId);
+      game.newRound(room.players);
+      this.displayNextJudge();
+
+      this.updateRoom();
+    }
+
   }
 
   playerSubmitted(gameId, roundId, playerId, choices) {
