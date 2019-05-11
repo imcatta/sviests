@@ -10,7 +10,7 @@ const ChatBox = React.createClass({
 
   render() {
     return (
-      <div className="chatbox">
+      <div className={ this.props.chatVisible ? 'chatbox' : 'hide' }>
         <Messages user={ this.props.user } currentUserName={ this.props.currentUserName } messages={ this.props.messages } />
         <Form onSubmit={ this.onSubmit }/>
       </div>

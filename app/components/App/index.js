@@ -16,7 +16,8 @@ const App = React.createClass({
       currentRound: null,
       gameStarted: false,
       currentUser: '',
-      currentUserName: ''
+      currentUserName: '',
+      chatVisible: true
     };
   },
 
@@ -58,6 +59,18 @@ const App = React.createClass({
 
   getCurrentRound() {
     return JSON.stringify(this.state.currentRound);
+  },
+
+  toggleChat() {
+     //this.state.chatVisible = !this.state.chatVisible;
+    this.setState({
+      chatVisible: !this.state.chatVisible
+    });
+  },
+
+  resetGame() {
+    this.props.socket.emit('start-game');
+    //this.props.socket.emit('sendchat', 'Game has been reset', 'Server');
   },
 
   getCurrentGame() {
@@ -129,6 +142,10 @@ const App = React.createClass({
     return (
       <main className={ styles.main }>
         <Stage { ...this.state } user={ this.user() } socket={ socket } data={ data } />
+        <div className="game-actions">
+          <button onClick={ this.toggleChat } title="Toggle chat">💬</button>
+          {/* <button onClick={ this.resetGame } title="Reset game (use if in a broken state">🔄</button> */}
+        </div>
         <ChatBox user={ this.user() } socket={ socket } { ...this.state } />
       </main>
     );
