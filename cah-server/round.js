@@ -129,17 +129,20 @@ class Round {
     if (!player && !player.cards) { player.cards = []; }
     //if (this.gameInterrupt) { player.cards = []; }
 
-    while (player.cards.length < 10) {
-      const cardIndex = this.getWhiteCard();
-      this.whiteCardsUsed.push(cardIndex);
-
-      const card = {
-        index: cardIndex,
-        text: whiteCards[cardIndex]
+    if (player.cards) {
+      while (player.cards.length < 10) {
+        const cardIndex = this.getWhiteCard();
+        this.whiteCardsUsed.push(cardIndex);
+  
+        const card = {
+          index: cardIndex,
+          text: whiteCards[cardIndex]
+        }
+  
+        player.addWhiteCard(card);
       }
-
-      player.addWhiteCard(card);
     }
+    
   }
 }
 

@@ -149,6 +149,7 @@ class CahServer {
         text: urlifyText(cleanString(data)),
         type: 'chat'
       });
+      console.log('chat message to ' + this.socket.room.name + ' ' + username + ': ' + data);
 
     }
 

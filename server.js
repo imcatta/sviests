@@ -6,7 +6,11 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const server = require('http').Server(app); // eslint-disable-line new-cap
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+  pingTimeout: 30000,
+  pingInterval: 60000, 
+  upgradeTimeout: 50000
+});
 const { cleanString, urlifyText } = require('./utils');
 const data = require('./data.json');
 const rooms = {};
