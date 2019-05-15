@@ -11,8 +11,8 @@
     "start": "node server",
     "start-live": "PORT=80 && node server",
     "start-live-win": "SET PORT=80 && node server",
-    "dev": "NODE_ENV=development node server",
-    "dev-win": "SET NODE_ENV=development && node server",
+    "dev": "NODE_ENV=development nodemon server",
+    "dev-win": "SET NODE_ENV=development && nodemon server",
     "build": "NODE_ENV=production webpack -p --config webpack.production.config.js",
     "build-win": "SET NODE_ENV=production && webpack -p --config webpack.production.config.js",
     "test": "./node_modules/.bin/mocha --reporter spec"
@@ -27,6 +27,7 @@
     "lodash": "^4.17.2",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
+    "redis": "^2.8.0",
     "sanitize-html": "^1.13.0",
     "socket.io": "^1.7.4",
     "socket.io-client": "^1.7.4"

@@ -76,7 +76,7 @@ class CahServer {
 
             // if(this.socket.room._playerCount > 2) {
             // NOTE : Restart the game if there are less than three remaining players.
-            // Otherwise, continue as usual. 
+            // Otherwise, continue as usual.
             if (this.socket.room._playerCount < 3) {
                 console.log('Restarting the game because lack of players (min. 3)');
 
@@ -158,12 +158,19 @@ class CahServer {
 
     displayNextJudge() {
         const { room } = this.socket;
-        room.newMessage({
-            username: 'Server',
-            text: `Round ${room._currentGame.rounds.length} - ${room._currentJudge.username} is the judge`,
-            type: 'server'
-        });
-
+        try {
+            room.newMessage({
+                username: 'Server',
+                text: `Round ${room._currentGame.rounds.length} - ${room._currentJudge.username} is the judge`,
+                type: 'server'
+            });
+        } catch (err) {
+            room.newMessage({
+                username: 'Server',
+                text: err.message,
+                type: 'server'
+            });
+        }
     }
 
     nextRound(gameId) {
