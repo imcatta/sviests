@@ -45,8 +45,6 @@ const App = React.createClass({
         if (perfEntries[0].type === 'reload') {
             // TODO: Rejoin previous session
             console.log('RELOAD')
-        } else {
-            console.log('NOT RELOAD')
         }
 
         window.addEventListener("beforeunload", (ev) => {

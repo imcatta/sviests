@@ -15,15 +15,19 @@ class Round {
         // Temporary fix to avoid crashing
         this.gameInterrupt = false;
 
-
+        this.whiteCard = {};
         this.chosenWhiteCards = {};
         this.winnerId = null;
         this.judgeId = null;
 
         this.allocateWhiteCards();
-        this.allocateBlackCard().then(() => {
+        this.allocateBlackCard();/* .then(() => {
             this.assignJudge();
-        });
+        }); */
+        this.assignJudge();
+
+        // TODO: Use a more elegant way to resolve this promise
+        this.saveGame().then(() => { });
     }
 
     get _blackCardIndex() {
@@ -105,7 +109,43 @@ class Round {
             pick: blackCards[index].pick
         }
 
-        return Datastore.set('xxx', JSON.stringify(this.blackCard));
+        // Datastore.set(this.gameId, JSON.stringify({ blackCard: this.blackCard}))
+        //     .then(result => console.log(`Saving cards to datastore: ${result}`))
+        //     .catch(err => console.error(err));
+    }
+
+    saveGame() {
+        // Retrieve data for update
+        const parseData = (_rawGameData) => {
+            let rawGameData = _rawGameData;
+            if (!rawGameData) {
+                rawGameData = '[]';
+            }
+
+            const gameData = JSON.parse(rawGameData);
+
+            const latestRound = {
+                whiteCards: this.whiteCard,
+                blackCards: this.blackCard,
+            };
+
+            // Append the data
+            gameData.push(latestRound);
+
+            return gameData;
+        };
+
+        const saveData = (gameData) => Datastore.set(this.gameId, JSON.stringify(gameData));
+
+        const displayResult = (result) => {
+            console.log(`Saving cards to datastore: ${result}`);
+        };
+
+        return Datastore.get(this.gameId)
+            .then(parseData)
+            .then(saveData)
+            .then(displayResult)
+            .catch(err => console.error(err));
     }
 
     playerSubmitted(playerId, choices) {
@@ -140,6 +180,12 @@ class Round {
             const card = {
                 index: cardIndex,
                 text: whiteCards[cardIndex]
+            }
+
+            if (this.whiteCard[playerId]) {
+                this.whiteCard[playerId].push(card);
+            } else {
+                this.whiteCard[playerId] = [];
             }
 
             player.addWhiteCard(card);
