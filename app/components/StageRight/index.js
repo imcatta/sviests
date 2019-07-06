@@ -6,30 +6,32 @@ const StageRight = React.createClass({
     const { onWhiteCardSelected, selectedCards } = this.props;
     return (
       <Card
-        key={ index }
+        key={index}
         colour="white"
-        card={ card }
-        isSelected={ selectedCards.includes(card.index) }
-        onClick={ onWhiteCardSelected } />
+        card={card}
+        isSelected={selectedCards.includes(card.index)}
+        onClick={onWhiteCardSelected}
+      />
     );
   },
 
   renderContent() {
     const { user, currentRound, currentUser } = this.props;
 
-    if (currentRound.judgeId === user.id || currentRound.chosenWhiteCards[user.id]) {
-      return <PlayerSubmissions { ...this.props } />;
+    if (
+      currentRound.judgeId === user.id ||
+      currentRound.chosenWhiteCards[user.id]
+    ) {
+      return <PlayerSubmissions {...this.props} />;
     }
 
-    return user.cards.map(this.renderPlayerCard);
+    if (user && user.cards) {
+      return user.cards.map(this.renderPlayerCard);
+    }
   },
 
   render() {
-    return (
-      <div className="col-right">
-        { this.renderContent() }
-      </div>
-    );
+    return <div className="col-right">{this.renderContent()}</div>;
   }
 });
 
