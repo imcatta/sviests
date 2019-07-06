@@ -1,7 +1,10 @@
 const _ = require('lodash');
 const Room = require('./room.js');
 const Player = require('./player.js');
-const { cleanString, urlifyText } = require('../utils');
+const {
+    cleanString,
+    urlifyText
+} = require('../utils');
 
 class CahServer {
     constructor(io) {
@@ -23,7 +26,7 @@ class CahServer {
     }
 
     userJoined(roomName) {
-        console.log("userJoined room " + roomName);
+        console.log(`userJoined room ${ roomName}`);
         this.rooms[roomName] = this.rooms[roomName] || new Room(roomName);
         this.socket.room = this.rooms[roomName];
         this.socket.join(roomName);
@@ -31,12 +34,12 @@ class CahServer {
     }
 
     userClosed(data) {
-        console.log('userclosed ran!!!!!!');
+        console.log('userclosed ran!');
         this.socket.room.newMessage({
             username: 'Server',
             text: `
-        ${ data.username} has left\n
-        (player count: ${ this.socket.room._playerCount})`,
+        ${data.username} has left\n
+        (player count: ${this.socket.room._playerCount})`,
             type: 'server'
         });
         this.updateRoom();
@@ -45,31 +48,39 @@ class CahServer {
     userLeft(reason) {
         //console.log('DISCONNECT from ' + this.socket.room.player);
 
-        console.log('reason: ' + reason);
+        console.log(`reason: ${ reason}`);
         //const { room, player } = this.socket;
 
-        if (this.socket.room && this.socket.player && this.socket.player.username !== undefined) {
-            console.log('ROOMNAME ' + this.socket.room.name);
-            console.log('PLAYERNAME ' + this.socket.player.username);
+        if (
+            this.socket.room &&
+            this.socket.player &&
+            this.socket.player.username !== undefined
+        ) {
+            console.log(`ROOMNAME ${ this.socket.room.name}`);
+            console.log(`PLAYERNAME ${ this.socket.player.username}`);
 
             this.socket.room.playerLeft(this.socket.player.id);
 
-
-            console.log('userLeft::: ' + this.socket.player.username + ' left room ' + this.socket.room.name);
+            console.log(
+                `userLeft::: ${
+                this.socket.player.username
+                } left room ${
+                this.socket.room.name}`
+            );
 
             //this.socket.disconnect();
 
             this.updateRoom();
 
             /* this.socket.room.newMessage({
-              username: 'Server',
-              text: `
-              ${ this.socket.player.username } has left\n
-              (player count: ${ this.socket.room._playerCount })`,
-              type: 'server'
-            });
-            this.socket.player = [];
-            this.updateRoom(); */
+                    username: 'Server',
+                    text: `
+                    ${ this.socket.player.username } has left\n
+                    (player count: ${ this.socket.room._playerCount })`,
+                    type: 'server'
+                  });
+                  this.socket.player = [];
+                  this.updateRoom(); */
 
             //this.socket.emit('disconnected');
             //this.socket.player.disconnect();
@@ -84,7 +95,7 @@ class CahServer {
 
                 this.socket.room.newMessage({
                     username: 'Server',
-                    text: `<strong>A player left, starting a new game.</strong>`,
+                    text: '<strong>A player left, starting a new game.</strong>',
                     type: 'server'
                 });
 
@@ -94,16 +105,18 @@ class CahServer {
     }
 
     addPlayer(player) {
-        let { id, username } = player;
+        let {
+            id,
+            username
+        } = player;
 
-        if (username === null || username === "") {
+        if (username === null || username === '') {
             username = `Guest${id}`;
         } else {
             username = cleanString(username);
         }
 
         //this.socket.currentUserName = username;
-
 
         if (this.socket.room) {
             const newPlayer = new Player(id, username);
@@ -113,16 +126,16 @@ class CahServer {
             try {
                 this.socket.room.addPlayer(newPlayer);
                 // NOTE: If a player joins a game in progress, let him join but deal cards after current round.
-                console.log(username + ' joined ' + this.socket.room.name)
-            }
-
-            catch (error) {
+                console.log(`${username } joined ${ this.socket.room.name}`);
+            } catch (error) {
                 console.log(error);
             }
 
             this.socket.room.newMessage({
                 username: 'Server',
-                text: `${username} has joined (player count: ${this.socket.room._playerCount})`,
+                text: `${username} has joined (player count: ${
+          this.socket.room._playerCount
+        })`,
                 type: 'server'
             });
 
@@ -134,7 +147,6 @@ class CahServer {
 
         if (this.socket.room._currentGame) {
             // Temporary fix, maybe disable joining to prevent crashes?
-
             //this.socket.room._currentGame.playerJoined(player);
         }
     }
@@ -142,7 +154,7 @@ class CahServer {
     sendChat(data, username) {
         this.socket.room.newMessage({
             //username: this.socket.player.username,
-            username: username,
+            username,
             text: urlifyText(cleanString(data)),
             type: 'chat'
         });
@@ -157,11 +169,15 @@ class CahServer {
     }
 
     displayNextJudge() {
-        const { room } = this.socket;
+        const {
+            room
+        } = this.socket;
         try {
             room.newMessage({
                 username: 'Server',
-                text: `Round ${room._currentGame.rounds.length} - ${room._currentJudge.username} is the judge`,
+                text: `Round ${room._currentGame.rounds.length} - ${
+          room._currentJudge.username
+        } is the judge`,
                 type: 'server'
             });
         } catch (err) {
@@ -174,7 +190,9 @@ class CahServer {
     }
 
     nextRound(gameId) {
-        const { room } = this.socket;
+        const {
+            room
+        } = this.socket;
         const game = room.getGameById(gameId);
         game.newRound(room.players);
         this.displayNextJudge();
@@ -191,7 +209,6 @@ class CahServer {
 
             this.updateRoom();
         }
-
     }
 
     winnerChosen(playerId, gameId, roundId) {
@@ -199,23 +216,27 @@ class CahServer {
 
         if (game && game.getRoundById(roundId)) {
             const round = game.getRoundById(roundId);
-            const roundIndex = _.findIndex(game.rounds, { id: roundId });
+            const roundIndex = _.findIndex(game.rounds, {
+                id: roundId
+            });
             round.winnerChosen(playerId);
             this.socket.room.newMessage({
                 username: 'Server',
-                text: `Round ${roundIndex + 1} - ${round.players[playerId].username} is the winner`,
+                text: `Round ${roundIndex + 1} - ${
+          round.players[playerId].username
+        } is the winner`,
                 type: 'server'
             });
 
             this.updateRoom();
         }
-
-
-
     }
 
     updateRoom() {
-        const { player, room } = this.socket;
+        const {
+            player,
+            room
+        } = this.socket;
 
         if (player && room) {
             const update = {
@@ -227,16 +248,13 @@ class CahServer {
                 playerCount: room._playerCount,
                 whiteCardsUsed: room._whiteCardsUsed,
                 currentGame: room._currentGame,
-                currentRound: room._currentGame ? room._currentGame._currentRound : null,
+                currentRound: room._currentGame ? room._currentGame._currentRound : null
                 //gameStarted: true
             };
             this.io.to(room.name).emit('updateroom', update);
-
         }
 
-
         //console.log('thisplayer ' + update.thisPlayer.id);
-
     }
 }
 

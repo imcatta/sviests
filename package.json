@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-eslint": "^10.0.2",
     "classnames": "^2.2.5",
     "express": "^4.16.4",
     "http": "0.0.0",
@@ -52,6 +53,7 @@
     "json-loader": "^0.5.4",
     "mocha": "^3.2.0",
     "node-sass": "^4.5.3",
+    "nodemon": "^1.19.1",
     "path": "^0.12.7",
     "postcss-loader": "^1.1.1",
     "rimraf": "^2.5.4",
