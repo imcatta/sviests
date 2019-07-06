@@ -6,8 +6,8 @@ const Form = React.createClass({
     evt.preventDefault();
     const input = this.refs.input;
     const message = input.value;
-    let tmp_user = JSON.parse(localStorage.getItem('user'));
-    let sender = tmp_user.username;
+    //let tmp_user = JSON.parse(localStorage.getItem('user'));
+    let sender = this.props.currentUserName;
     input.value = '';
     if(message !== '') {
       this.props.onSubmit(message, sender);

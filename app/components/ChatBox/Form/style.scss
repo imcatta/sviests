@@ -31,3 +31,15 @@
     text-transform: uppercase;
   }
 }
+
+.hide {
+  display: none;
+}
+
+.game-actions {
+  margin: 5px;
+  text-align: right;
+  button {
+    padding: 8px 8px 10px 8px;
+  }
+}

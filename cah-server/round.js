@@ -7,7 +7,7 @@ class Round {
         this.gameId = gameId;
         this.id = _.uniqueId(Math.floor(Date.now() / 1000));
         this.players = players;
-        this.playerIds = _.map(this.players, (p => p.id));
+        this.playerIds = _.map(this.players, ((p) => {return p.id}));
         this.whiteCardsUsed = [...whiteCardsUsed];
         this.blackCardsUsed = [...blackCardsUsed];
         this.previousJudge = previousJudge;
@@ -21,13 +21,14 @@ class Round {
         this.judgeId = null;
 
         this.allocateWhiteCards();
-        this.allocateBlackCard();/* .then(() => {
-            this.assignJudge();
-        }); */
+        this.allocateBlackCard();
+        /* .then(() => {
+                    this.assignJudge();
+                }); */
         this.assignJudge();
 
         // TODO: Use a more elegant way to resolve this promise
-        this.saveGame().then(() => { });
+        this.saveGame().then(() => {});
     }
 
     get _blackCardIndex() {
@@ -35,11 +36,11 @@ class Round {
     }
 
     playerLeft(playerId) {
-        console.log("playerLeft " + playerId);
+        console.log('playerLeft ' + playerId);
         this.gameInterrupt = true;
 
         const player = this.players[playerId];
-        console.log('gameID' + this.gameId);
+        console.log(`gameID${  this.gameId}`);
         // if (!player && !player.cards) { return; }
         //delete this.chosenWhiteCards[playerId];
         //
@@ -49,9 +50,9 @@ class Round {
         //});
         //
         delete this.players[playerId];
-        this.playerIds = _.map(this.players, (p => p.id));
+        this.playerIds = _.map(this.players, ((p) => {return p.id}));
 
-        console.log('playerIDs that are left ' + this.playerIds);
+        console.log(`playerIDs that are left ${  this.playerIds}`);
 
         if (this.judgeId === playerId) {
             this.judgeId = null;
@@ -60,7 +61,7 @@ class Round {
     }
 
     playerJoined(player) {
-        console.log("playerJoined: " + JSON.stringify(player));
+        console.log('playerJoined: ' + JSON.stringify(player));
 
         // Temporary fix
         //if (!this.gameInterrupt) {
@@ -85,7 +86,7 @@ class Round {
 
     getWhiteCard() {
         const whiteCards = data.whiteCards;
-        const index = _.random(0, whiteCards.length - 1)
+        const index = _.random(0, whiteCards.length - 1);
 
         if (this.whiteCardsUsed.includes(index)) {
             return this.getWhiteCard();
@@ -96,7 +97,7 @@ class Round {
 
     allocateBlackCard() {
         const blackCards = data.blackCards;
-        const index = _.random(0, blackCards.length - 1)
+        const index = _.random(0, blackCards.length - 1);
 
         if (this.blackCardsUsed.includes(index)) {
             return this.allocateBlackCard();
@@ -104,10 +105,10 @@ class Round {
 
         this.blackCardsUsed.push(index);
         this.blackCard = {
-            index: index,
+            index,
             text: blackCards[index].text,
             pick: blackCards[index].pick
-        }
+        };
 
         // Datastore.set(this.gameId, JSON.stringify({ blackCard: this.blackCard}))
         //     .then(result => console.log(`Saving cards to datastore: ${result}`))
@@ -135,7 +136,7 @@ class Round {
             return gameData;
         };
 
-        const saveData = (gameData) => Datastore.set(this.gameId, JSON.stringify(gameData));
+        const saveData = (gameData) => {return Datastore.set(this.gameId, JSON.stringify(gameData))};
 
         const displayResult = (result) => {
             console.log(`Saving cards to datastore: ${result}`);
@@ -145,7 +146,7 @@ class Round {
             .then(parseData)
             .then(saveData)
             .then(displayResult)
-            .catch(err => console.error(err));
+            .catch((err) => {return console.error(err)});
     }
 
     playerSubmitted(playerId, choices) {
@@ -158,7 +159,9 @@ class Round {
         _.forEach(this.chosenWhiteCards, (choices, playerId) => {
             const player = this.players[playerId];
             choices.forEach((choice) => {
-                const choiceIndex = _.findIndex(player.cards, { index: choice });
+                const choiceIndex = _.findIndex(player.cards, {
+                    index: choice
+                });
                 player.cards.splice(choiceIndex, 1);
             });
         });
@@ -170,7 +173,9 @@ class Round {
 
     allocateWhiteCardsForPlayer(player, playerId) {
         const whiteCards = data.whiteCards;
-        if (!player && !player.cards) { player.cards = []; }
+        if (!player && !player.cards) {
+            player.cards = [];
+        }
         //if (this.gameInterrupt) { player.cards = []; }
 
         while (player.cards.length < 10) {
@@ -180,7 +185,7 @@ class Round {
             const card = {
                 index: cardIndex,
                 text: whiteCards[cardIndex]
-            }
+            };
 
             if (this.whiteCard[playerId]) {
                 this.whiteCard[playerId].push(card);
