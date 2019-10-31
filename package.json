@@ -24,7 +24,7 @@
     "express": "^4.16.4",
     "http": "0.0.0",
     "jquery": "^3.1.1",
-    "lodash": "^4.17.2",
+    "lodash": "^4.17.13",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "sanitize-html": "^1.13.0",
